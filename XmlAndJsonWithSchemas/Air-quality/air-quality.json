@@ -1,9 +1,0 @@
-{
-    "$schema": "./air-quality-schema.json",
-    "countryName": "Australia",
-    "pollutant": "Sulphur Dioxide",
-    "variable": "Total man-made emissions",
-    "year": 1990,
-    "unit": "Tonnes",
-    "value": 1585.754
-}

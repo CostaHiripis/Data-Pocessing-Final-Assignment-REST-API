@@ -27,13 +27,13 @@
                             "type": "string",
                             "pattern": "^[0-9]{4}$"
                         },
-                        "population": {
+                        "count": {
                             "description": "The actual population",
                             "type": "integer",
                             "exclusiveMinimum": 0
                         }
                     },
-                    "required": ["countryName", "year", "population"]
+                    "required": ["countryName", "year", "count"]
                 }
             },
             "required": ["country"]

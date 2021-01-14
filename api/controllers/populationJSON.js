@@ -5,7 +5,7 @@ const jsonValidator = require('../validators/jsonValidator');
 exports.population_get_populations = (req, res) => {
 
     Population.find()
-    .select('countryName year population -_id')
+    .select('countryName year count -_id')
     .exec()
     .then(results => {
 
@@ -15,7 +15,7 @@ exports.population_get_populations = (req, res) => {
                     country: {
                         countryName: result.countryName,
                         year: result.year,
-                        population: result.population,
+                        count: result.count,
                     },
                     message: "Population returned sucessfully"
                 }
@@ -56,7 +56,7 @@ exports.population_create_population = (req, res) => {
                 _id: new mongoose.Types.ObjectId(),
                 countryName: populations.country.countryName,
                 year: populations.country.year,
-                population: populations.country.population,
+                count: populations.country.count,
             });
             
             population
@@ -67,7 +67,7 @@ exports.population_create_population = (req, res) => {
                         country: {
                             countryName: result.countryName,
                             year: result.year,
-                            population: result.population,
+                            count: result.count,
                         },
                         message: "Population created sucessfully"
                     }
@@ -113,7 +113,7 @@ exports.population_get_population = (req, res) => {
     });
 
     Population.find(population)
-    .select('countryName year population -_id')
+    .select('countryName year count -_id')
     .exec()
     .then(results => {
         
@@ -125,7 +125,7 @@ exports.population_get_population = (req, res) => {
                         country: {
                             countryName: result.countryName,
                             year: result.year,
-                            population: result.population,
+                            count: result.count,
                         },
                         message: "Population returned sucessfully"
                     }
@@ -176,7 +176,7 @@ exports.population_patch_population = (req, res) => {
             const newPopulation = new Population({
                 countryName: populations.country.countryName,
                 year: populations.country.year,
-                population: populations.country.population,
+                count: populations.country.count,
             });
     
             Population.updateOne(population, {$set: newPopulation})

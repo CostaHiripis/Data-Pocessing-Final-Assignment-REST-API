@@ -29,7 +29,7 @@
                         },
                         "population": {
                             "description": "The actual population",
-                            "type": "number",
+                            "type": "integer",
                             "exclusiveMinimum": 0
                         }
                     },

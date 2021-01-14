@@ -104,9 +104,8 @@ exports.airQuality_create_airQuality = (req, res) => {
 
                 }
 
-                res.send(json2xml.json2xml(response));
                 res.status(201);
-
+                res.send(json2xml.json2xml(response));
             })
             .catch(err => {
                 if (err.code == 11000) {

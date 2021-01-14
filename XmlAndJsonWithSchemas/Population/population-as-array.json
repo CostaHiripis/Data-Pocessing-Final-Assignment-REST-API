@@ -1,0 +1,11 @@
+{
+    "$schema": "./population-schema-as-array.json",
+    "population-per-country": [
+        {
+            "country-name": "Aruba",
+            "year": 1960,
+            "count": 54211
+        }
+    ]
+    
+}

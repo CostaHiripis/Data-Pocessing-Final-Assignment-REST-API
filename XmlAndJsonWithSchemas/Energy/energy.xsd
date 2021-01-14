@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+	<!-- definition of simple elements -->
+	<xs:element name="country-name" type="xs:string" />
+	<xs:element name="year" type="xs:gYear" />
+	<xs:element name="energy-consumption" type="xs:float" />
+
+	<!-- definition of attributes -->
+	<xs:attribute name="country-code">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:pattern value="[A-Z][A-Z][A-Z]" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+
+	<!-- definition of complex elements -->
+	<xs:element name="country">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="country-name" />
+				<xs:element ref="year" />
+				<xs:element ref="energy-consumption" />
+			</xs:sequence>
+			<xs:attribute ref="country-code" use="required" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="energy-consumption-per-country">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="country" minOccurs="1" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

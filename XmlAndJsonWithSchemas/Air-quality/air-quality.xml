@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<air-quality-per-country xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="air-quality.xsd">
+
+    <country>
+        <country-name>Australia</country-name>
+        <polutant>Sulphur Dioxide</polutant>
+        <variable>Total man-made emissions</variable>
+        <year>1990</year>
+        <unit>Tonnes</unit>
+        <value>1585.754</value>
+    </country>
+    
+</air-quality-per-country>

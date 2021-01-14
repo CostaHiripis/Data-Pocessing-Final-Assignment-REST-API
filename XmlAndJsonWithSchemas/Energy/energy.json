@@ -1,0 +1,7 @@
+{
+    "$schema": "./energy-schema.json",
+    "country-name": "Afghanistan",
+    "country-code": "AFG",
+    "year":1980 ,
+    "energy-consumption": 581.9322012
+} 

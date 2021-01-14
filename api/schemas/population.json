@@ -1,3 +1,42 @@
 {
-    
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/population.json",
+    "title": "Population",
+    "description": "Population with lots of values",
+    "type": "object",
+    "properties":{
+        "population": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/populationObject" }
+        }
+    },
+    "required": ["population"],
+    "definitions": {
+        "populationObject": {
+            "type": "object",
+            "properties": {
+                "country": {
+                "type": "object",
+                    "properties": {
+                        "countryName": {
+                            "description": "The country the population belongs to",
+                            "type": "string"
+                        },
+                        "year": {
+                            "description": "The year the population was measured",
+                            "type": "string",
+                            "pattern": "^[0-9]{4}$"
+                        },
+                        "population": {
+                            "description": "The actual population",
+                            "type": "number",
+                            "exclusiveMinimum": 0
+                        }
+                    },
+                    "required": ["countryName", "year", "population"]
+                }
+            },
+            "required": ["country"]
+        }
+    }    
 }

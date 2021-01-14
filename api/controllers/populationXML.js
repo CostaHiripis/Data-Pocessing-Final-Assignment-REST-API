@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const json2xml = require('../json2xml/json2xml');
 const xmlValidator = require('../validators/xmlValidator');
 
-exports.population_get_energies = (req, res) => {
+exports.population_get_populations = (req, res) => {
 
     Population.find()
     .select('countryName year count -_id')

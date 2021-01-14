@@ -1,0 +1,55 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/air-quality.schema.json",
+    "title": "Air Quality",
+    "description": "Air qualities with lots of values",
+    "type": "object",
+    "properties":{
+        "airQuality": {
+            "type": "array",
+            "items": { "$ref": "#/definitions/airQualityObject" }
+        }
+    },
+    "required": ["airQuality"],
+    "definitions": {
+        "airQualityObject": {
+            "type": "object",
+            "properties": {
+                "country": {
+                "type": "object",
+                    "properties": {
+                        "countryName": {
+                            "description": "The country the air quality belongs to",
+                            "type": "string"
+                        },
+                        "polutant": {
+                            "description": "The name of the polutant",
+                            "type": "string"
+                        },
+                        "variable": {
+                            "description": "Contributor to the polutant",
+                            "type": "string"
+                        },
+                        "year": {
+                            "description": "The year the air quality was measured",
+                            "type": "string",
+                            "pattern": "^[0-9]{4}$"
+                        },
+                        "unit": {
+                            "description": "The units of the air quailty",
+                            "type": "string"
+                        },
+                        "value": {
+                            "description": "The actual air quality",
+                            "type": "number",
+                            "exclusiveMinimum": 0
+                        }
+                    },
+                    "required": ["countryName", "polutant", "variable", "year", "unit", "value"]
+                }
+            },
+            "required": ["country"]
+        }
+            
+    }    
+}

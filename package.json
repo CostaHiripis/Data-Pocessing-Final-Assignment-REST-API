@@ -1,0 +1,22 @@
+{
+  "name": "predatorapi",
+  "version": "1.0.0",
+  "description": "Final Assignment Data Processing",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "author": "Costandino Hiripis",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "body-parser-xml": "^2.0.1",
+    "express": "^4.17.1",
+    "jsonschema": "^1.4.0",
+    "mongoose": "^5.11.11",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

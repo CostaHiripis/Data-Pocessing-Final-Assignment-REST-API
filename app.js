@@ -36,7 +36,7 @@ app.use((req, res, next) => {
 
 app.use('/air-quality', airQualityRoutes);
 app.use('/energy', energyRoutes);
-// app.use('/population', populationRoutes);
+app.use('/population', populationRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');

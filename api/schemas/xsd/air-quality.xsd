@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+<!-- definition of simple elements -->
+<xs:element name="countryName" type="xs:string"/>
+<xs:element name="polutant" type="xs:string"/>
+<xs:element name="variable" type="xs:string"/>
+<xs:element name="year" type="xs:gYear"/>
+<xs:element name="unit" type="xs:string"/>
+<xs:element name="value" type="xs:float"/>
+
+<!-- definition of complex elements -->
+<xs:element name="country">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element ref="countryName"/>
+            <xs:element ref="polutant"/>
+            <xs:element ref="variable"/>
+            <xs:element ref="year"/>
+            <xs:element ref="unit"/>
+            <xs:element ref="value"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="airQuality">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element ref="country" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+
+</xs:schema>

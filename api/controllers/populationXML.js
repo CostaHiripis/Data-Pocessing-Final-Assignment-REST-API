@@ -23,21 +23,21 @@ exports.population_get_populations = (req, res) => {
             })
         }
 
-        // if(xmlValidator.validatePopulation(response).valid) {
+        if(xmlValidator.validatePopulation(response).valid) {
             
             res.status(200);
             res.send(json2xml.json2xml(response));
 
-        // } else {
+        } else {
             
-        //     const response = {
-        //         message: "Population does not match the schema"
-        //     }
+            const response = {
+                message: "Population does not match the schema"
+            }
 
-        //     res.status(422);
-        //     res.send(response);
+            res.status(422);
+            res.send(response);
             
-        // }
+        }
     })
     .catch(err => {
         const response = {
@@ -49,19 +49,31 @@ exports.population_get_populations = (req, res) => {
 
 exports.population_create_population = (req, res) => {
 
+    for (countries of req.body.population.country) {
 
-    // if(xmlValidator.validatePopulation(req.body).valid)
-    // {
-        for (countries of req.body.population.country) {
+        var countryNameWithExtraChars = countries.countryName.toString();
+        var nameWithoutExtraChars = countryNameWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var countryNameWithExtraChars = countries.countryName.toString();
-            var nameWithoutExtraChars = countryNameWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var yearWithExtraChars = countries.year.toString();
+        var yearWithoutExtraChars = yearWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var yearWithExtraChars = countries.year.toString();
-            var yearWithoutExtraChars = yearWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var countWithExtraChars= countries.count.toString();
+        var countWithoutExtraChars= countWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var countWithExtraChars= countries.count.toString();
-            var countWithoutExtraChars= countWithExtraChars.replace("[ ", "").replace(" ]", "");
+        const request = {
+            population: [
+                {
+                    country: {
+                    countryName: nameWithoutExtraChars,
+                    year: yearWithoutExtraChars,
+                    count: Number(countWithoutExtraChars),
+                    }
+                }
+            ]
+        }
+            
+        if(xmlValidator.validatePopulation(request).valid)
+        {
 
             const population = new Population({
                 _id: new mongoose.Types.ObjectId(),
@@ -105,15 +117,15 @@ exports.population_create_population = (req, res) => {
                     res.send(json2xml.json2xml(response));
                 }
             });
-        }
-    // } else {
-    //     const response = {
-    //         message: "Population does not match the schema"
-    //     }
+        } else {
+            const response = {
+                message: "Population does not match the schema"
+            }
 
-    //     res.status(422);
-    //     res.send(response);
-    // }
+            res.status(422);
+            res.send(json2xml.json2xml(response));
+        }
+    }
 }
 
 exports.population_get_population = (req, res) => {
@@ -134,7 +146,7 @@ exports.population_get_population = (req, res) => {
                 population: results.map(result => {
                     return {
                         country: {
-                            countryName: result.countryName,
+                            countryName1: result.countryName,
                             year: result.year,
                             count: result.count,
                         },
@@ -143,20 +155,20 @@ exports.population_get_population = (req, res) => {
                 })
             }
             
-            // if(jsonValidator.validatePopulation(response).valid) {
+            if(xmlValidator.validatePopulation(response).valid) {
             
                 res.status(200);
                 res.send(json2xml.json2xml(response));
     
-            // } else {
+            } else {
                 
-            //     const response = {
-            //         message: "Population does not match the schema"
-            //     }
+                const response = {
+                    message: "Population does not match the schema"
+                }
     
-            //     res.status(422);
-            //     res.send(json2xml.json2xml(response));
-            // }
+                res.status(422);
+                res.send(json2xml.json2xml(response));
+            }
             
         } else {
             const response = {
@@ -177,31 +189,43 @@ exports.population_get_population = (req, res) => {
 
 exports.population_patch_population = (req, res) => {
 
-    // if(xmlValidator.validatePopulation(req.body).valid)
-    // {
+    const population = new Population({
+        countryName: req.params.countryName,
+        year: req.params.year
+    });
 
-        const population = new Population({
-            countryName: req.params.countryName,
-            year: req.params.year
-        });
+    for (countries of req.body.population.country) {
 
-        for (countries of req.body.population.country) {
+        var countryNameWithExtraChars = countries.countryName.toString();
+        var nameWithoutExtraChars = countryNameWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var countryNameWithExtraChars = countries.countryName.toString();
-            var nameWithoutExtraChars = countryNameWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var yearWithExtraChars = countries.year.toString();
+        var yearWithoutExtraChars = yearWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var yearWithExtraChars = countries.year.toString();
-            var yearWithoutExtraChars = yearWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var countWithExtraChars= countries.count.toString();
+        var countWithoutExtraChars= countWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var countWithExtraChars= countries.count.toString();
-            var countWithoutExtraChars= countWithExtraChars.replace("[ ", "").replace(" ]", "");
+        const request = {
+            population: [
+                {
+                    country: {
+                    countryName: nameWithoutExtraChars,
+                    year: yearWithoutExtraChars,
+                    count: Number(countWithoutExtraChars),
+                    }
+                }
+            ]
+        }
+            
+        if(xmlValidator.validatePopulation(request).valid)
+        {
 
             const newPopulation = new Population({
                 countryName: nameWithoutExtraChars,
                 year: yearWithoutExtraChars,
                 count: countWithoutExtraChars,
             });
-    
+
             Population.updateOne(population, {$set: newPopulation})
             .exec()
             .then(result => {
@@ -239,15 +263,15 @@ exports.population_patch_population = (req, res) => {
                     res.send(json2xml.json2xml(response));
                 }
             });
-        }
-    // } else {
-    //     const response = {
-    //         message: "Population does not match the schema"
-    //     }
+        } else {
+            const response = {
+                message: "Population does not match the schema"
+            }
 
-    //     res.status(422);
-    //     res.send(response);
-    // } 
+            res.status(422);
+            res.send(json2xml.json2xml(response));
+        } 
+    }
 }
 
 exports.population_delete_population = (req, res) => {

@@ -81,7 +81,7 @@ All responses will either be in the format of JSON or XML
 </airQuality>
 ```
 
-## List a specific value from Air Quality
+## List a specific Air Quality
 
 ### Definition 
 `GET http://localhost:3000/air-quality/xml/:countryName/:year`
@@ -117,3 +117,42 @@ All responses will either be in the format of JSON or XML
 <message>No valid Air Quality found for provided parameters</message>
 ```
 
+## Update a specific Air Quality
+
+### Definition 
+`PATCH http://localhost:3000/air-quality/xml/:countryName/:year`
+
+### Parameters
+
+- `countryName: string` the name of the country the reading belongs to 
+- `polutant: string` the name of the polutant
+- `variable: string` the contributor of the polutant
+- `year: gYear` the year the air quality was measured
+- `unit: string` the units of the air quailty
+- `value: decimal` the actual air quality value
+
+### Response
+
+- `201 Created` on success
+- `404 Not Found` on trying to update a specific Air Quality that doesnt exist
+
+### XML on success
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<airQuality>
+    <country>
+        <countryName>Austria</countryName>
+        <polutant>Sulphur Dioxide</polutant>
+        <variable>Total man-made emissions</variable>
+        <year>1990</year>
+        <unit>Tonnes</unit>
+        <value>1585.754</value>
+    </country>
+    <message>Air Quality returned sucessfully</message>
+</airQuality>
+```
+### XML on trying retrieve a specific Air Quailty that does not exist
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message>No valid Air Quality found for provided parameters</message>
+```

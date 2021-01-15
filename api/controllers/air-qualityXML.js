@@ -1,7 +1,7 @@
 const AirQuality = require('../models/air-quality');
 const mongoose = require('mongoose');
 const json2xml = require('../json2xml/json2xml');
-const xmlValidator = require('../validators/xmlValidator');
+const xmlValidator = require('../validators/jsonValidator');
 
 exports.airQuality_get_airQualities = (req, res) => {
 
@@ -26,21 +26,21 @@ exports.airQuality_get_airQualities = (req, res) => {
             })
         }
 
-        // if(xmlValidator.validateAirQuality(response).valid) {
+        if(xmlValidator.validateAirQuality(response).valid) {
             
             res.status(200);
             res.send(json2xml.json2xml(response));
 
-        // } else {
+        } else {
             
-        //     const response = {
-        //         message: "Air Quality does not match the schema"
-        //     }
+            const response = {
+                message: "Air Quality does not match the schema"
+            }
 
-        //     res.status(422);
-        //     res.send(response);
+            res.status(422);
+            res.send(json2xml.json2xml(response));
             
-        // }
+        }
     })
     .catch(err => {
         const response = {
@@ -52,30 +52,44 @@ exports.airQuality_get_airQualities = (req, res) => {
 
 exports.airQuality_create_airQuality = (req, res) => {
 
+    for (countries of req.body.airQuality.country) {
 
-    // if(xmlValidator.validateAirQuality(req.body).valid)
-    // {
-        for (countries of req.body.airQuality.country) {
+        var countryNameWithExtraChars = countries.countryName.toString();
+        var nameWithoutExtraChars = countryNameWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var countryNameWithExtraChars = countries.countryName.toString();
-            var nameWithoutExtraChars = countryNameWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var polutantWithExtraChars = countries.polutant.toString();
+        var polutantWithoutExtraChars = polutantWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var polutantWithExtraChars = countries.polutant.toString();
-            var polutantWithoutExtraChars = polutantWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var variableWithExtraChars = countries.variable.toString();
+        var variableWithoutExtraChars = variableWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var variableWithExtraChars = countries.variable.toString();
-            var variableWithoutExtraChars = variableWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var yearWithExtraChars = countries.year.toString();
+        var yearWithoutExtraChars = yearWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var yearWithExtraChars = countries.year.toString();
-            var yearWithoutExtraChars = yearWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var unitWithExtraChars= countries.unit.toString();
+        var unitWithoutExtraChars= unitWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var unitWithExtraChars= countries.unit.toString();
-            var unitWithoutExtraChars= unitWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var valueWithExtraChars = countries.value.toString();
+        var valueWithoutExtraChars = valueWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var valueWithExtraChars = countries.value.toString();
-            var valueWithoutExtraChars = valueWithExtraChars.replace("[ ", "").replace(" ]", "");
+        const request = {
+            airQuality: [
+                {
+                    country: {
+                    countryName: nameWithoutExtraChars,
+                    polutant: polutantWithoutExtraChars,
+                    variable: variableWithoutExtraChars,
+                    year: yearWithoutExtraChars,
+                    unit: unitWithoutExtraChars,
+                    value: Number(valueWithoutExtraChars),
+                    }
+                }
+            ]
+        }
+        
+        if(xmlValidator.validateAirQuality(request).valid)
+        {
 
-            console.log(countries.countryName);
             const airQuality = new AirQuality({
                 _id: new mongoose.Types.ObjectId(),
                 countryName: nameWithoutExtraChars,
@@ -123,15 +137,15 @@ exports.airQuality_create_airQuality = (req, res) => {
                     res.send(json2xml.json2xml(response));
                 }
             });
-        }
-    // } else {
-    //     const response = {
-    //         message: "Air Quality does not match the schema"
-    //     }
+        } else {
+            const response = {
+                message: "Air Quality does not match the schema"
+            }
 
-    //     res.status(422);
-    //     res.send(response);
-    // }
+            res.status(422);
+            res.send(json2xml.json2xml(response));
+        }
+    }
 }
 
 exports.airQuality_get_airQuality = (req, res) => {
@@ -164,20 +178,20 @@ exports.airQuality_get_airQuality = (req, res) => {
                 })
             }
             
-            // if(jsonValidator.validateAirQuality(response).valid) {
+            if(xmlValidator.validateAirQuality(response).valid) {
             
                 res.status(200);
                 res.send(json2xml.json2xml(response));
     
-            // } else {
+            } else {
                 
-            //     const response = {
-            //         message: "Air Quality does not match the schema"
-            //     }
+                const response = {
+                    message: "Air Quality does not match the schema"
+                }
     
-            //     res.status(422);
-            //     res.send(json2xml.json2xml(response));
-            // }
+                res.status(422);
+                res.send(json2xml.json2xml(response));
+            }
             
         } else {
             const response = {
@@ -198,33 +212,48 @@ exports.airQuality_get_airQuality = (req, res) => {
 
 exports.airQuality_patch_airQuality = (req, res) => {
 
-    // if(xmlValidator.validateAirQuality(req.body).valid)
-    // {
+    const airQuality = new AirQuality({
+        countryName: req.params.countryName,
+        year: req.params.year
+    });
 
-        const airQuality = new AirQuality({
-            countryName: req.params.countryName,
-            year: req.params.year
-        });
+    for (countries of req.body.airQuality.country) {
 
-        for (countries of req.body.airQuality.country) {
+        var countryNameWithExtraChars = countries.countryName.toString();
+        var nameWithoutExtraChars = countryNameWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var countryNameWithExtraChars = countries.countryName.toString();
-            var nameWithoutExtraChars = countryNameWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var polutantWithExtraChars = countries.polutant.toString();
+        var polutantWithoutExtraChars = polutantWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var polutantWithExtraChars = countries.polutant.toString();
-            var polutantWithoutExtraChars = polutantWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var variableWithExtraChars = countries.variable.toString();
+        var variableWithoutExtraChars = variableWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var variableWithExtraChars = countries.variable.toString();
-            var variableWithoutExtraChars = variableWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var yearWithExtraChars = countries.year.toString();
+        var yearWithoutExtraChars = yearWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var yearWithExtraChars = countries.year.toString();
-            var yearWithoutExtraChars = yearWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var unitWithExtraChars= countries.unit.toString();
+        var unitWithoutExtraChars= unitWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var unitWithExtraChars= countries.unit.toString();
-            var unitWithoutExtraChars= unitWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var valueWithExtraChars = countries.value.toString();
+        var valueWithoutExtraChars = valueWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var valueWithExtraChars = countries.value.toString();
-            var valueWithoutExtraChars = valueWithExtraChars.replace("[ ", "").replace(" ]", "");
+        const request = {
+            airQuality: [
+                {
+                    country: {
+                    countryName: nameWithoutExtraChars,
+                    polutant: polutantWithoutExtraChars,
+                    variable: variableWithoutExtraChars,
+                    year: yearWithoutExtraChars,
+                    unit: unitWithoutExtraChars,
+                    value: Number(valueWithoutExtraChars),
+                    }
+                }
+            ]
+        }
+        
+        if(xmlValidator.validateAirQuality(request).valid)
+        {
 
             const newAirQuality = new AirQuality({
                 countryName: nameWithoutExtraChars,
@@ -234,7 +263,7 @@ exports.airQuality_patch_airQuality = (req, res) => {
                 unit: unitWithoutExtraChars,
                 value: valueWithoutExtraChars
             });
-    
+
             AirQuality.updateOne(airQuality, {$set: newAirQuality})
             .exec()
             .then(result => {
@@ -272,15 +301,15 @@ exports.airQuality_patch_airQuality = (req, res) => {
                     res.send(json2xml.json2xml(response));
                 }
             });
-        }
-    // } else {
-    //     const response = {
-    //         message: "Air Quality does not match the schema"
-    //     }
+        } else {
+            const response = {
+            message: "Air Quality does not match the schema"
+            }
 
-    //     res.status(422);
-    //     res.send(response);
-    // } 
+            res.status(422);
+            res.send(json2xml.json2xml(response));
+        } 
+    }
 }
 
 exports.airQuality_delete_airQuality = (req, res) => {

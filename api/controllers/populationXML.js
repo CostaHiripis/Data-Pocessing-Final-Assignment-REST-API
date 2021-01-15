@@ -1,7 +1,7 @@
 const Population = require('../models/population');
 const mongoose = require('mongoose');
 const json2xml = require('../json2xml/json2xml');
-const xmlValidator = require('../validators/xmlValidator');
+const xmlValidator = require('../validators/jsonValidator');
 
 exports.population_get_populations = (req, res) => {
 

@@ -1,7 +1,7 @@
 const Energy = require('../models/energy');
 const mongoose = require('mongoose');
 const json2xml = require('../json2xml/json2xml');
-const xmlValidator = require('../validators/xmlValidator');
+const xmlValidator = require('../validators/jsonValidator');
 
 exports.energy_get_energies = (req, res) => {
 
@@ -24,21 +24,21 @@ exports.energy_get_energies = (req, res) => {
             })
         }
 
-        // if(xmlValidator.validateEnergy(response).valid) {
+        if(xmlValidator.validateEnergy(response).valid) {
             
             res.status(200);
             res.send(json2xml.json2xml(response));
 
-        // } else {
+        } else {
             
-        //     const response = {
-        //         message: "Energy does not match the schema"
-        //     }
+            const response = {
+                message: "Energy does not match the schema"
+            }
 
-        //     res.status(422);
-        //     res.send(response);
+            res.status(422);
+            res.send(json2xml.json2xml(response));
             
-        // }
+        }
     })
     .catch(err => {
         const response = {
@@ -50,22 +50,35 @@ exports.energy_get_energies = (req, res) => {
 
 exports.energy_create_energy = (req, res) => {
 
+    for (countries of req.body.energy.country) {
 
-    // if(xmlValidator.validateEnergy(req.body).valid)
-    // {
-        for (countries of req.body.energy.country) {
+        var countryNameWithExtraChars = countries.countryName.toString();
+        var nameWithoutExtraChars = countryNameWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var countryNameWithExtraChars = countries.countryName.toString();
-            var nameWithoutExtraChars = countryNameWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var countryCodeWithExtraChars = countries.countryCode.toString();
+        var countryCodeWithoutExtraChars = countryCodeWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var countryCodeWithExtraChars = countries.countryCode.toString();
-            var countryCodeWithoutExtraChars = countryCodeWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var yearWithExtraChars = countries.year.toString();
+        var yearWithoutExtraChars = yearWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var yearWithExtraChars = countries.year.toString();
-            var yearWithoutExtraChars = yearWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var energyConsumptionWithExtraChars= countries.energyConsumption.toString();
+        var energyConsumptionWithoutExtraChars= energyConsumptionWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var energyConsumptionWithExtraChars= countries.energyConsumption.toString();
-            var energyConsumptionWithoutExtraChars= energyConsumptionWithExtraChars.replace("[ ", "").replace(" ]", "");
+        const request = {
+            energy: [
+                {
+                    country: {
+                    countryName: countryNameWithExtraChars,
+                    countryCode: countryCodeWithoutExtraChars,
+                    year: yearWithoutExtraChars,
+                    energyConsumption: Number(energyConsumptionWithoutExtraChars),
+                    }
+                }
+            ]
+        }
+        
+        if(xmlValidator.validateEnergy(request).valid)
+        {
 
             const energy = new Energy({
                 _id: new mongoose.Types.ObjectId(),
@@ -74,7 +87,7 @@ exports.energy_create_energy = (req, res) => {
                 year: yearWithoutExtraChars,
                 energyConsumption: energyConsumptionWithoutExtraChars,
             });
-    
+
             energy
             .save()
             .then(result => {
@@ -111,15 +124,15 @@ exports.energy_create_energy = (req, res) => {
                     res.send(json2xml.json2xml(response));
                 }
             });
-        }
-    // } else {
-    //     const response = {
-    //         message: "Energy does not match the schema"
-    //     }
+        } else {
+            const response = {
+                message: "Energy does not match the schema"
+            }
 
-    //     res.status(422);
-    //     res.send(response);
-    // }
+            res.status(422);
+            res.send(json2xml.json2xml(response));
+        }
+    }   
 }
 
 exports.energy_get_energy = (req, res) => {
@@ -150,20 +163,20 @@ exports.energy_get_energy = (req, res) => {
                 })
             }
             
-            // if(jsonValidator.validateEnergy(response).valid) {
+            if(xmlValidator.validateEnergy(response).valid) {
             
                 res.status(200);
                 res.send(json2xml.json2xml(response));
     
-            // } else {
+            } else {
                 
-            //     const response = {
-            //         message: "Energy does not match the schema"
-            //     }
+                const response = {
+                    message: "Energy does not match the schema"
+                }
     
-            //     res.status(422);
-            //     res.send(json2xml.json2xml(response));
-            // }
+                res.status(422);
+                res.send(json2xml.json2xml(response));
+            }
             
         } else {
             const response = {
@@ -184,27 +197,40 @@ exports.energy_get_energy = (req, res) => {
 
 exports.energy_patch_energy = (req, res) => {
 
-    // if(xmlValidator.validateEnergy(req.body).valid)
-    // {
+    const energy = new Energy({
+        countryName: req.params.countryName,
+        year: req.params.year
+    });
 
-        const energy = new Energy({
-            countryName: req.params.countryName,
-            year: req.params.year
-        });
+    for (countries of req.body.energy.country) {
 
-        for (countries of req.body.energy.country) {
+        var countryNameWithExtraChars = countries.countryName.toString();
+        var nameWithoutExtraChars = countryNameWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var countryNameWithExtraChars = countries.countryName.toString();
-            var nameWithoutExtraChars = countryNameWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var countryCodeWithExtraChars = countries.countryCode.toString();
+        var countryCodeWithoutExtraChars = countryCodeWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var countryCodeWithExtraChars = countries.countryCode.toString();
-            var countryCodeWithoutExtraChars = countryCodeWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var yearWithExtraChars = countries.year.toString();
+        var yearWithoutExtraChars = yearWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var yearWithExtraChars = countries.year.toString();
-            var yearWithoutExtraChars = yearWithExtraChars.replace("[ ", "").replace(" ]", "");
+        var energyConsumptionWithExtraChars= countries.energyConsumption.toString();
+        var energyConsumptionWithoutExtraChars= energyConsumptionWithExtraChars.replace("[ ", "").replace(" ]", "");
 
-            var energyConsumptionWithExtraChars= countries.energyConsumption.toString();
-            var energyConsumptionWithoutExtraChars= energyConsumptionWithExtraChars.replace("[ ", "").replace(" ]", "");
+        const request = {
+            energy: [
+                {
+                    country: {
+                    countryName: countryNameWithExtraChars,
+                    countryCode: countryCodeWithoutExtraChars,
+                    year: yearWithoutExtraChars,
+                    energyConsumption: Number(energyConsumptionWithoutExtraChars),
+                    }
+                }
+            ]
+        }
+        
+        if(xmlValidator.validateEnergy(request).valid)
+        {
 
             const newEnergy = new Energy({
                 countryName: nameWithoutExtraChars,
@@ -212,7 +238,7 @@ exports.energy_patch_energy = (req, res) => {
                 year: yearWithoutExtraChars,
                 energyConsumption: energyConsumptionWithoutExtraChars,
             });
-    
+
             Energy.updateOne(energy, {$set: newEnergy})
             .exec()
             .then(result => {
@@ -250,15 +276,15 @@ exports.energy_patch_energy = (req, res) => {
                     res.send(json2xml.json2xml(response));
                 }
             });
-        }
-    // } else {
-    //     const response = {
-    //         message: "Energy does not match the schema"
-    //     }
-
-    //     res.status(422);
-    //     res.send(response);
-    // } 
+        } else {
+            const response = {
+                message: "Energy does not match the schema"
+            }
+        
+            res.status(422);
+            res.send(json2xml.json2xml(response));
+        } 
+    }
 }
 
 exports.energy_delete_energy = (req, res) => {
